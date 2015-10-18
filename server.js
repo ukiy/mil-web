@@ -45,7 +45,8 @@ function getOrder(req, res){
 
 function searchOrder(res, res){
   res.setHeader('Content-Type', 'application/json');
-  search(req.query).exec(function(err, data){
+  var query = url.parse(res.url, true);
+  search(query).exec(function(err, data){
     if (err) { return res.end(JSON.stringify(err)); }
     //console.timeEnd("db");
     return res.end(JSON.stringify({
