@@ -23,14 +23,15 @@ function doRequest(req, res) {
   if (req.url.toString().indexOf('searchOrder') > -1) {
     return searchOrder(req, res);
   }
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.write('Hello World\n');
-  res.end();
+
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  res.end(JSON.stringify({result: true,data: {}}));
 }
 
 function getOrder(req, res){
   Order.find({orderId: req.params.orderId},  function(err,  order){
-    res.setHeader('Content-Type',  'application/json');
+
+    res.writeHead(200, {'Content-Type': 'application/json'});
     if (err){ return res.end(JSON.stringify({result: true,data: error})); }
     if (!order) {
       return res.end(JSON.stringify({result: false, data: order}));
@@ -43,9 +44,10 @@ function getOrder(req, res){
   })
 };
 
-function searchOrder(res, res){
-  res.setHeader('Content-Type', 'application/json');
-  var query = url.parse(res.url, true);
+function searchOrder(req, res){
+
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  var query = url.parse(req.url, true);
   search(query).exec(function(err, data){
     if (err) { return res.end(JSON.stringify(err)); }
     //console.timeEnd("db");
